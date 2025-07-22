@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum StatusPembayaran {
+  MENUNGGU_PEMBAYARAN
+  MENUNGGU_KONFIRMASI // Setelah user upload bukti
+  LUNAS               // Setelah admin konfirmasi
+  DITOLAK
+}
+
+model TagihanPembayaran {
+  id             String    @id @default(cuid())
+
+  // REFERENSI ke Pendaftaran Service dan User Service
+  pendaftaranId  String    @unique
+  calonMahasiswaId String
+
+  deskripsi      String    // e.g., "Biaya Pendaftaran PMB Gelombang 1"
+  jumlah         Float
+  status         StatusPembayaran @default(MENUNGGU_PEMBAYARAN)
+  
+  // Informasi bukti bayar dari user (B2)
+  urlBuktiBayar  String?
+  tanggalUpload  DateTime?
+
+  // Informasi konfirmasi dari admin (A7)
+  adminKonfirmasiId String?
+  tanggalKonfirmasi DateTime?
+  catatanAdmin      String?
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@map("tagihan_pembayaran")
+  @@index([calonMahasiswaId])
+}
