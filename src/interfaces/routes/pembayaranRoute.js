@@ -14,7 +14,6 @@ const router = express.Router();
 // Endpoint internal, dipanggil oleh event handler
 router.post(
   "/internal/create-tagihan",
-  authenticateToken,
   controller.handleCreateTagihan
 );
 

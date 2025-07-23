@@ -3,39 +3,7 @@ import * as appService from "../../application/pembayaranApplicationService.js";
 // Controller internal untuk membuat tagihan
 export const handleCreateTagihan = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-
-    const verifRes = await fetch(
-      `${process.env.PENDAFTARAN_SERVICE_URL}/api/verifyPendaftaran/${req.body.pendaftaranId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    const pendaftaranVerif = await verifRes.json();
-    if (pendaftaranVerif.message !== "Terverifikasi") {
-      return res.status(400).json({
-        message: "Id pendaftaran tidak valid",
-      });
-    }
-
-    const response = await fetch(
-      `${process.env.PENDAFTARAN_SERVICE_URL}/api/pendaftaran/${req.body.pendaftaranId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    const pendaftaran = await response.json();
-
-    const useCaseData = {
-      pendaftaranId: req.body.pendaftaranId,
-      calonMahasiswaId: pendaftaran.data.calonMahasiswaId,
-    };
-
-    const tagihan = await appService.createTagihanUseCase(useCaseData);
+    const tagihan = await appService.createTagihanUseCase(req.body);
     res
       .status(201)
       .json({ message: "Tagihan berhasil dibuat.", data: tagihan });
@@ -47,7 +15,9 @@ export const handleCreateTagihan = async (req, res) => {
 // Controller untuk B1 & B3 (Lihat Tagihan)
 export const getTagihan = async (req, res) => {
   try {
-    const tagihan = await appService.getTagihanUseCase(req.params.pendaftaranId);
+    const tagihan = await appService.getTagihanUseCase(
+      req.params.pendaftaranId
+    );
     if (tagihan.calonMahasiswaId !== req.user.id)
       return res.status(403).json({
         message: "Tidak mempunyai hak",
