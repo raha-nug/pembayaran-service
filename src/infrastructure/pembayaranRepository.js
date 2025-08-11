@@ -12,4 +12,6 @@ export const findByPendaftaranId = async (pendaftaranId) => {
 export const update = async (id, data) => {
   return prisma.tagihanPembayaran.update({ where: { id }, data });
 };
-
+export const getAllTagihan = async () => {
+  return prisma.tagihanPembayaran.findMany();
+};

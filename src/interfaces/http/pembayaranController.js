@@ -62,3 +62,14 @@ export const konfirmasiPembayaran = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+// Controller untuk A7 (Konfirmasi oleh Admin)
+export const getAllTagihan = async (req, res) => {
+  try {
+    const tagihan = await appService.getAllTagihanUseCase({});
+    res
+      .status(200)
+      .json({ message: "Pembayaran berhasil didapatkan.", data: tagihan });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};

@@ -34,5 +34,12 @@ router.post(
   requireAdmin,
   controller.konfirmasiPembayaran // A7
 );
+// Endpoint untuk admin
+router.get(
+  "/tagihan/",
+  authenticateToken,
+  requireAdmin,
+  controller.getAllTagihan // A7
+);
 
 export default router;

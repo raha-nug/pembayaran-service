@@ -38,6 +38,9 @@ export const uploadBuktiBayarUseCase = async ({
   const tagihanBaru = domain.prosesUploadBukti(tagihan, urlBuktiBayar);
   return repository.update(tagihan.id, tagihanBaru);
 };
+export const getAllTagihanUseCase = async () => {
+  return repository.getAllTagihan();
+};
 
 /**
  * Use Case untuk A7. Konfirmasi Pembayaran oleh Admin.
