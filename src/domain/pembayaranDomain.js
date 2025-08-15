@@ -17,7 +17,7 @@ export const createTagihan = ({
 };
 
 export const prosesUploadBukti = (tagihan, urlBuktiBayar) => {
-  if (tagihan.status !== "MENUNGGU_PEMBAYARAN" || tagihan.status === "DITOLAK") {
+  if (tagihan.status === "LUNAS" || tagihan.status === "MENUNGGU_KONFIRMASI") {
     throw new Error("Tidak dapat mengunggah bukti untuk tagihan ini.");
   }
   return {
