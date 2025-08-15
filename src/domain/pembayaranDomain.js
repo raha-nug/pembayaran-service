@@ -29,10 +29,7 @@ export const prosesUploadBukti = (tagihan, urlBuktiBayar) => {
 };
 
 export const konfirmasiPembayaran = (tagihan, adminId, data) => {
-  if (
-    tagihan.status !== "MENUNGGU_KONFIRMASI" ||
-    tagihan.status === "DITOLAK"
-  ) {
+  if (tagihan.status !== "MENUNGGU_KONFIRMASI") {
     throw new Error(
       "Hanya tagihan yang menunggu konfirmasi yang dapat diproses."
     );
@@ -41,7 +38,7 @@ export const konfirmasiPembayaran = (tagihan, adminId, data) => {
     ...tagihan,
     adminKonfirmasiId: adminId,
     tanggalKonfirmasi: new Date(),
-    urlBuktiBayar: null,
+    urlBuktiBayar: data.status === "DITOLAK" ? null : tagihan.urlBuktiBayar,
     catatanAdmin: data.catatanAdmin,
     status: data.status,
   };

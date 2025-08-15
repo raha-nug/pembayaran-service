@@ -60,7 +60,7 @@ export const adminKonfirmasiPembayaranUseCase = async ({
     data
   );
 
-  if (tagihanTerkonfirmasi.status === "DITOLAK") {
+  if (tagihan.status === "DITOLAK") {
     const url = tagihan.urlBuktiBayar;
     const parsedUrl = new URL(url);
     const remotePath = parsedUrl.pathname.slice(1); // Hilangkan '/' di awal
