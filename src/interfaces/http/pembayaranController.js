@@ -54,6 +54,7 @@ export const konfirmasiPembayaran = async (req, res) => {
     const tagihan = await appService.adminKonfirmasiPembayaranUseCase({
       pendaftaranId: req.params.pendaftaranId,
       adminId: req.user.id,
+      data : req.body
     });
     res
       .status(200)
@@ -62,6 +63,9 @@ export const konfirmasiPembayaran = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+
+
 // Controller untuk A7 (Konfirmasi oleh Admin)
 export const getAllTagihan = async (req, res) => {
   try {

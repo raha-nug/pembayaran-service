@@ -16,7 +16,6 @@ export const createTagihan = ({
   };
 };
 
-
 export const prosesUploadBukti = (tagihan, urlBuktiBayar) => {
   if (tagihan.status !== "MENUNGGU_PEMBAYARAN") {
     throw new Error("Tidak dapat mengunggah bukti untuk tagihan ini.");
@@ -29,9 +28,11 @@ export const prosesUploadBukti = (tagihan, urlBuktiBayar) => {
   };
 };
 
-
-export const konfirmasiPembayaran = (tagihan, adminId) => {
-  if (tagihan.status !== "MENUNGGU_KONFIRMASI") {
+export const konfirmasiPembayaran = (tagihan, adminId, data) => {
+  if (
+    tagihan.status !== "MENUNGGU_KONFIRMASI" ||
+    tagihan.status === "DITOLAK"
+  ) {
     throw new Error(
       "Hanya tagihan yang menunggu konfirmasi yang dapat diproses."
     );
@@ -40,6 +41,8 @@ export const konfirmasiPembayaran = (tagihan, adminId) => {
     ...tagihan,
     adminKonfirmasiId: adminId,
     tanggalKonfirmasi: new Date(),
-    status: "LUNAS",
+    urlBuktiBayar: null,
+    catatanAdmin: data.catatanAdmin,
+    status: data.status,
   };
 };

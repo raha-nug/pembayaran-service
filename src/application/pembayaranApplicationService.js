@@ -1,5 +1,6 @@
 import * as domain from "../domain/pembayaranDomain.js";
 import * as repository from "../infrastructure/pembayaranRepository.js";
+import { deleteFromFTP } from "../interfaces/http/middlewares/fileUpload.js";
 // import { publishEvent } from '../infrastructure/eventBroker.js';
 
 /**
@@ -48,11 +49,28 @@ export const getAllTagihanUseCase = async () => {
 export const adminKonfirmasiPembayaranUseCase = async ({
   pendaftaranId,
   adminId,
+  data,
 }) => {
   const tagihan = await repository.findByPendaftaranId(pendaftaranId);
   if (!tagihan) throw new Error("Tagihan tidak ditemukan.");
 
-  const tagihanTerkonfirmasi = domain.konfirmasiPembayaran(tagihan, adminId);
+  const tagihanTerkonfirmasi = domain.konfirmasiPembayaran(
+    tagihan,
+    adminId,
+    data
+  );
+
+  if (tagihanTerkonfirmasi.status === "DITOLAK") {
+    const url = tagihan.urlBuktiBayar;
+    const parsedUrl = new URL(url);
+    const remotePath = parsedUrl.pathname.slice(1); // Hilangkan '/' di awal
+
+    console.log(remotePath);
+
+    const deleted = await deleteFromFTP(`${remotePath}`);
+    if (!deleted) throw new Error("Gagal menghapus file di server FTP");
+  }
+
   const tagihanFinal = await repository.update(
     tagihan.id,
     tagihanTerkonfirmasi
