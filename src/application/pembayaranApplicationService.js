@@ -6,16 +6,13 @@ import { deleteFromFTP } from "../interfaces/http/middlewares/fileUpload.js";
 /**
  * Use Case yang dipicu oleh event `PendaftaranBerhasilDiajukanEvent`.
  */
-export const createTagihanUseCase = async ({
-  pendaftaranId,
-  calonMahasiswaId,
-}) => {
-  const existingTagihan = await repository.findByPendaftaranId(pendaftaranId);
+export const createTagihanUseCase = async (data) => {
+  const existingTagihan = await repository.findByPendaftaranId(data.pendaftaranId);
   if (existingTagihan) return existingTagihan;
 
   const tagihanData = domain.createTagihan({
-    pendaftaranId,
-    calonMahasiswaId,
+    pendaftaranId: data.pendaftaranId,
+    calonMahasiswaId: data.calonMahasiswaId,
     jumlah: 150000, // Contoh biaya pendaftaran
     deskripsi: "Biaya Pendaftaran Mahasiswa Baru",
   });
