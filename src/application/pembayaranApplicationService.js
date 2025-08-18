@@ -13,7 +13,7 @@ export const createTagihanUseCase = async (data) => {
   const tagihanData = domain.createTagihan({
     pendaftaranId: data.pendaftaranId,
     calonMahasiswaId: data.calonMahasiswaId,
-    jumlah: 150000, // Contoh biaya pendaftaran
+    jumlah: 250000, // Contoh biaya pendaftaran
     deskripsi: "Biaya Pendaftaran Mahasiswa Baru",
   });
 
